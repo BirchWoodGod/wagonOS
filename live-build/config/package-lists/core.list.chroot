@@ -16,3 +16,9 @@ gnupg
 lsb-release
 software-properties-common
 linux-firmware
+# Bootloader for the live ISO (syslinux/isolinux).
+# Calamares installs grub on the target disk during install; syslinux is just
+# for booting the live environment. Also provides isohybrid for USB-boot.
+syslinux
+syslinux-utils
+isolinux

@@ -5,6 +5,11 @@ set -e
 
 ARCH="${ARCH:-amd64}"
 
+# genisoimage extras: -allow-limited-size + -iso-level 3 let the ISO
+# contain files >4GiB (our squashfs exceeds that with the gaming stack).
+# Exported so lb_config bakes it into live-build/config/binary.
+export GENISOIMAGE_OPTIONS_EXTRA="-allow-limited-size -iso-level 3"
+
 # Linux flavour differs by arch
 case "$ARCH" in
     amd64) LINUX_FLAVOUR=generic ;;
@@ -20,7 +25,7 @@ lb config noauto \
     --parent-archive-areas "main restricted universe multiverse" \
     --architectures "${ARCH}" \
     --binary-images iso-hybrid \
-    --bootloader grub2 \
+    --bootloader syslinux \
     --linux-flavours "${LINUX_FLAVOUR}" \
     --debian-installer false \
     --apt-recommends false \
