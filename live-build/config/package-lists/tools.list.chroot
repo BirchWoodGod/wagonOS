@@ -1,6 +1,7 @@
 # System tooling, CLI utilities, flatpak, networking
 # System info
-fastfetch
+# fastfetch is NOT in noble repos — installed from GitHub .deb release
+# by hooks/normal/0003-install-fastfetch.hook.chroot
 htop
 btop
 iotop

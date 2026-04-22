@@ -1,0 +1,23 @@
+#!/bin/bash
+# fastfetch isn't in Ubuntu noble repos; upstream ships .deb files per arch.
+set -euo pipefail
+echo "[wagonOS] Installing fastfetch from GitHub releases"
+
+ARCH="$(dpkg --print-architecture)"
+case "$ARCH" in
+    amd64) FF_ARCH=amd64 ;;
+    arm64) FF_ARCH=aarch64 ;;
+    *) echo "[wagonOS] Unsupported arch $ARCH for fastfetch"; exit 1 ;;
+esac
+
+apt-get install -y --no-install-recommends wget ca-certificates
+
+TMPDIR=$(mktemp -d)
+trap "rm -rf $TMPDIR" EXIT
+
+wget -qO "$TMPDIR/fastfetch.deb" \
+    "https://github.com/fastfetch-cli/fastfetch/releases/latest/download/fastfetch-linux-${FF_ARCH}.deb"
+
+apt-get install -y "$TMPDIR/fastfetch.deb"
+
+echo "[wagonOS] fastfetch: $(fastfetch --version | head -1)"

@@ -16,8 +16,11 @@ libxss-dev
 libimlib2-dev
 libfreetype-dev
 libfontconfig-dev
-# Display manager
-ly
+# Display manager: ly is NOT in noble repos — built from source by
+# hooks/normal/0015-install-ly.hook.chroot. Listed here are its build deps.
+libpam0g-dev
+libxcb-xkb-dev
+xz-utils
 # Fonts
 fonts-dejavu
 fonts-liberation

@@ -1,0 +1,58 @@
+#!/bin/bash
+# ly display manager isn't in Ubuntu noble repos. Build from source using zig.
+set -euo pipefail
+echo "[wagonOS] Building ly display manager from source"
+
+ARCH="$(dpkg --print-architecture)"
+case "$ARCH" in
+    amd64) ZIG_ARCH=x86_64 ;;
+    arm64) ZIG_ARCH=aarch64 ;;
+    *) echo "[wagonOS] Unsupported arch $ARCH for ly"; exit 1 ;;
+esac
+
+ZIG_VERSION="0.14.1"
+LY_REF="master"
+
+TMPDIR=$(mktemp -d /tmp/ly-build.XXXXXX)
+trap "rm -rf $TMPDIR" EXIT
+
+# Build deps are in desktop.list.chroot (libpam0g-dev, libxcb-xkb-dev, xz-utils);
+# these are belt-and-suspenders in case the hook runs before that list applies.
+apt-get install -y --no-install-recommends \
+    wget ca-certificates xz-utils tar git \
+    libpam0g-dev libxcb-xkb-dev
+
+# Preserve our /etc/ly/config.ini (shipped via includes.chroot) — ly's build
+# may drop a default config in its place; we'll restore ours after.
+PRESERVED_CONFIG=""
+if [[ -f /etc/ly/config.ini ]]; then
+    PRESERVED_CONFIG="$TMPDIR/config.ini.preserved"
+    cp /etc/ly/config.ini "$PRESERVED_CONFIG"
+fi
+
+cd "$TMPDIR"
+
+# Fetch zig toolchain
+echo "[wagonOS] Fetching zig $ZIG_VERSION ($ZIG_ARCH)"
+wget -q "https://ziglang.org/download/${ZIG_VERSION}/zig-linux-${ZIG_ARCH}-${ZIG_VERSION}.tar.xz"
+tar -xf "zig-linux-${ZIG_ARCH}-${ZIG_VERSION}.tar.xz"
+ZIG_BIN="$TMPDIR/zig-linux-${ZIG_ARCH}-${ZIG_VERSION}/zig"
+
+# Fetch ly source
+echo "[wagonOS] Fetching ly source ($LY_REF)"
+git clone --depth 1 --branch "$LY_REF" https://github.com/fairyglade/ly.git ly-src
+cd ly-src
+
+# Build + install. `installexe` is ly's install target; places:
+#   /usr/bin/ly, /usr/lib/systemd/system/ly.service, /etc/ly/config.ini
+"$ZIG_BIN" build installexe -Dinit_system=systemd
+
+# Restore our config if ly's install wrote over it
+if [[ -n "$PRESERVED_CONFIG" && -f "$PRESERVED_CONFIG" ]]; then
+    cp "$PRESERVED_CONFIG" /etc/ly/config.ini
+    echo "[wagonOS] Restored /etc/ly/config.ini from includes"
+fi
+
+# Verify
+command -v ly >/dev/null || { echo "[wagonOS] ERROR: ly binary not installed"; exit 1; }
+echo "[wagonOS] ly installed successfully"
