@@ -25,6 +25,9 @@ live-build/config/includes.chroot/usr/share/wagonos/sl/
 *.sha256
 *.log
 build.log
+# wget retry logs from live-build
+wget-log*
+live-build/wget-log*
 
 # Editor/OS cruft
 *.swp
