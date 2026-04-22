@@ -20,7 +20,7 @@ lb config noauto \
     --parent-archive-areas "main restricted universe multiverse" \
     --architectures "${ARCH}" \
     --binary-images iso-hybrid \
-    --bootloader grub \
+    --bootloader grub2 \
     --linux-flavours "${LINUX_FLAVOUR}" \
     --debian-installer false \
     --apt-recommends false \
