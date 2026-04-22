@@ -20,7 +20,7 @@ lb config noauto \
     --parent-archive-areas "main restricted universe multiverse" \
     --architectures "${ARCH}" \
     --binary-images iso-hybrid \
-    --bootloaders "grub-efi grub-pc" \
+    --bootloader grub \
     --linux-flavours "${LINUX_FLAVOUR}" \
     --debian-installer false \
     --apt-recommends false \
@@ -29,7 +29,6 @@ lb config noauto \
     --iso-application "wagonOS" \
     --iso-publisher "wagonOS Project; https://github.com/BirchWoodGod/wagonOS" \
     --iso-volume "wagonOS-24.04-${ARCH}" \
-    --image-name "wagonOS-24.04-${ARCH}" \
     --bootappend-live "boot=live components quiet splash username=user hostname=wagonos-live" \
     --mirror-bootstrap "http://archive.ubuntu.com/ubuntu/" \
     --mirror-chroot "http://archive.ubuntu.com/ubuntu/" \
