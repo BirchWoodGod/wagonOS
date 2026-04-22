@@ -22,6 +22,8 @@ check-host:
 	@command -v debootstrap >/dev/null 2>&1 || { echo "ERROR: debootstrap not installed. Run: sudo apt install debootstrap"; exit 1; }
 	@command -v xorriso >/dev/null 2>&1 || { echo "ERROR: xorriso not installed. Run: sudo apt install xorriso"; exit 1; }
 	@command -v rsync >/dev/null 2>&1 || { echo "ERROR: rsync not installed. Run: sudo apt install rsync"; exit 1; }
+	@command -v isohybrid >/dev/null 2>&1 || { echo "ERROR: isohybrid not installed. Run: sudo apt install syslinux-utils"; exit 1; }
+	@command -v mksquashfs >/dev/null 2>&1 || { echo "ERROR: mksquashfs not installed. Run: sudo apt install squashfs-tools"; exit 1; }
 	@echo "Host OK. live-build: $$(lb --version 2>&1 | head -1)"
 
 prep:
