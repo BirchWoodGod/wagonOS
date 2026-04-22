@@ -23,6 +23,8 @@ live-build/config/includes.chroot/usr/share/wagonos/sl/
 *.packages
 *.zsync
 *.sha256
+*.log
+build.log
 
 # Editor/OS cruft
 *.swp
