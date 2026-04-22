@@ -15,6 +15,4 @@ ca-certificates
 gnupg
 lsb-release
 software-properties-common
-firmware-linux
-firmware-linux-nonfree
 linux-firmware
