@@ -1,0 +1,15 @@
+#!/bin/bash
+# Enable i386 multiarch — required for Steam, Wine, 32-bit gaming libs.
+# Runs on amd64 only; skip on other arches (live-build 3.0~a57 doesn't
+# support .chroot_<arch> suffix filtering, so we do it inline).
+set -euo pipefail
+
+ARCH="$(dpkg --print-architecture)"
+if [[ "$ARCH" != "amd64" ]]; then
+    echo "[wagonOS] Skipping i386 multiarch (arch=$ARCH, not amd64)"
+    exit 0
+fi
+
+echo "[wagonOS] Enabling i386 multiarch"
+dpkg --add-architecture i386
+apt-get update

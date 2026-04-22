@@ -1,0 +1,16 @@
+#!/bin/bash
+# Remove dangling /boot/initrd.img* symlinks before lb_chroot_hacks runs.
+# lb_chroot_hacks does `find chroot/boot -name 'initrd*' | xargs chmod go+r`;
+# chmod on a dangling symlink errors out and (with set -e) kills the build.
+# Dangling symlinks happen when multiple kernels are installed
+# (linux-image-generic pulls in both base and HWE) and one initrd isn't
+# generated.
+set -euo pipefail
+echo "[wagonOS] Fixing dangling /boot/initrd* symlinks"
+
+for link in /boot/initrd.img /boot/initrd.img.old /boot/vmlinuz /boot/vmlinuz.old; do
+    if [[ -L "$link" ]] && [[ ! -e "$link" ]]; then
+        echo "[wagonOS] Removing dangling: $link -> $(readlink "$link")"
+        rm -f "$link"
+    fi
+done
