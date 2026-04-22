@@ -1,5 +1,5 @@
 # wagonOS — Ubuntu 24.04-based, gaming-focused, DWM + ly
-.PHONY: help iso iso-amd64 iso-arm64 clean purge show-config check-host prep prep-clean
+.PHONY: help iso iso-amd64 iso-arm64 clean clean-binary purge show-config check-host prep prep-clean
 
 LB_DIR    := live-build
 INCLUDES  := $(LB_DIR)/config/includes.chroot
@@ -54,6 +54,9 @@ iso-arm64: check-host prep
 
 clean:
 	cd $(LB_DIR) && sudo lb clean
+
+clean-binary:
+	cd $(LB_DIR) && sudo lb clean --binary
 
 purge:
 	cd $(LB_DIR) && sudo lb clean --purge
