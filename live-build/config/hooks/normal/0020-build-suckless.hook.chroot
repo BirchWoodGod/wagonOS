@@ -1,0 +1,18 @@
+#!/bin/bash
+# Build DWM, dmenu, st, slstatus from source
+# Source tree is shipped at /usr/share/wagonos/sl (via includes.chroot)
+set -euo pipefail
+echo "[wagonOS] Building DWM/dmenu/st/slstatus from source"
+
+if [[ ! -d /usr/share/wagonos/sl ]]; then
+    echo "[wagonOS] WARNING: suckless source not found at /usr/share/wagonos/sl — skipping"
+    exit 0
+fi
+
+if [[ ! -x /usr/local/bin/build_suckless_apt.sh ]]; then
+    echo "[wagonOS] ERROR: /usr/local/bin/build_suckless_apt.sh missing or not executable"
+    exit 1
+fi
+
+# Run as root, non-interactive
+SL_DIR=/usr/share/wagonos/sl /usr/local/bin/build_suckless_apt.sh --non-interactive

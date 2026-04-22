@@ -1,0 +1,24 @@
+#!/bin/bash
+# Install Firefox from Mozilla's APT repo (the .deb), NOT the snap-transition
+# package that ships with Ubuntu 24.04.
+set -euo pipefail
+echo "[wagonOS] Setting up Mozilla APT repo + installing Firefox .deb"
+
+apt-get install -y --no-install-recommends wget gpg
+
+install -d -m 755 /usr/share/keyrings
+wget -qO- https://packages.mozilla.org/apt/repo-signing-key.gpg \
+    | gpg --dearmor > /usr/share/keyrings/packages.mozilla.org.gpg
+
+cat > /etc/apt/sources.list.d/mozilla.list <<'EOF'
+deb [signed-by=/usr/share/keyrings/packages.mozilla.org.gpg] https://packages.mozilla.org/apt mozilla main
+EOF
+
+cat > /etc/apt/preferences.d/mozilla <<'EOF'
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
+EOF
+
+apt-get update
+apt-get install -y firefox

@@ -1,0 +1,35 @@
+# System tooling, CLI utilities, flatpak, networking
+# System info
+fastfetch
+htop
+btop
+iotop
+
+# Networking utilities
+net-tools
+iputils-ping
+traceroute
+mtr-tiny
+curl
+wget
+
+# Filesystem tools
+gparted
+exfat-fuse
+exfatprogs
+ntfs-3g
+
+# Helpful CLI tools
+tldr
+ripgrep
+fd-find
+bat
+fzf
+nano
+vim
+git
+
+# Flatpak (Flathub remote configured by hooks/normal/0040-flatpak-flathub.hook.chroot)
+flatpak
+xdg-desktop-portal
+xdg-desktop-portal-gtk

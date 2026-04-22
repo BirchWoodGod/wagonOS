@@ -1,0 +1,5 @@
+#!/bin/bash
+# Add Flathub remote system-wide (no flatpaks pre-installed; clean ship)
+set -euo pipefail
+echo "[wagonOS] Adding Flathub remote"
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo

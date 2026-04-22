@@ -1,0 +1,28 @@
+#!/bin/bash
+# Install systemd unit that runs the first-boot wizard once on first graphical login
+set -euo pipefail
+echo "[wagonOS] Installing first-boot wizard"
+
+if [[ ! -x /usr/local/bin/wagonos-firstboot ]]; then
+    echo "[wagonOS] WARNING: /usr/local/bin/wagonos-firstboot missing or not executable"
+    exit 0
+fi
+
+install -d -m 755 /var/lib/wagonos
+
+cat > /etc/systemd/system/wagonos-firstboot.service <<'EOF'
+[Unit]
+Description=wagonOS first-boot setup wizard
+After=graphical.target
+ConditionPathExists=!/var/lib/wagonos/.firstboot-done
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/wagonos-firstboot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=graphical.target
+EOF
+
+systemctl enable wagonos-firstboot.service

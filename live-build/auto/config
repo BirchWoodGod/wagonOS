@@ -1,0 +1,39 @@
+#!/bin/sh
+# wagonOS live-build configuration
+# Invoked by: lb config (called from Makefile or scripts/build-iso.sh)
+set -e
+
+ARCH="${ARCH:-amd64}"
+
+# Linux flavour differs by arch
+case "$ARCH" in
+    amd64) LINUX_FLAVOUR=generic ;;
+    arm64) LINUX_FLAVOUR=generic ;;
+    *)     echo "Unsupported ARCH: $ARCH"; exit 1 ;;
+esac
+
+lb config noauto \
+    --mode ubuntu \
+    --distribution noble \
+    --parent-distribution noble \
+    --archive-areas "main restricted universe multiverse" \
+    --parent-archive-areas "main restricted universe multiverse" \
+    --architectures "${ARCH}" \
+    --binary-images iso-hybrid \
+    --bootloaders "grub-efi grub-pc" \
+    --linux-flavours "${LINUX_FLAVOUR}" \
+    --debian-installer false \
+    --apt-recommends false \
+    --apt-indices false \
+    --memtest none \
+    --iso-application "wagonOS" \
+    --iso-publisher "wagonOS Project; https://github.com/BirchWoodGod/wagonOS" \
+    --iso-volume "wagonOS-24.04-${ARCH}" \
+    --image-name "wagonOS-24.04-${ARCH}" \
+    --bootappend-live "boot=live components quiet splash username=user hostname=wagonos-live" \
+    --mirror-bootstrap "http://archive.ubuntu.com/ubuntu/" \
+    --mirror-chroot "http://archive.ubuntu.com/ubuntu/" \
+    --mirror-binary "http://archive.ubuntu.com/ubuntu/" \
+    --mirror-chroot-security "http://security.ubuntu.com/ubuntu/" \
+    --mirror-binary-security "http://security.ubuntu.com/ubuntu/" \
+    "${@}"

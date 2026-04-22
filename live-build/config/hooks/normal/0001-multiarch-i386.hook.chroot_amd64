@@ -1,0 +1,6 @@
+#!/bin/bash
+# Enable i386 multiarch — required for Steam, Wine, 32-bit gaming libs
+set -euo pipefail
+echo "[wagonOS] Enabling i386 multiarch"
+dpkg --add-architecture i386
+apt-get update

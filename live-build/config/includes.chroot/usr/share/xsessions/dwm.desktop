@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=dwm
+Comment=Dynamic window manager (wagonOS — via ~/.xinitrc)
+Exec=/bin/sh -l -c "$HOME/.xinitrc"
+Type=Application

@@ -1,0 +1,23 @@
+#!/bin/bash
+# Apply wagonOS branding to system identity files
+set -euo pipefail
+echo "[wagonOS] Applying wagonOS branding"
+
+# /etc/os-release ships via includes.chroot/etc/os-release
+# /etc/lsb-release: regenerate to match
+cat > /etc/lsb-release <<'EOF'
+DISTRIB_ID=wagonOS
+DISTRIB_RELEASE=24.04
+DISTRIB_CODENAME=noble
+DISTRIB_DESCRIPTION="wagonOS 24.04"
+EOF
+
+# /etc/issue + /etc/issue.net (shown at TTY login)
+cat > /etc/issue <<'EOF'
+wagonOS 24.04 \n \l
+
+EOF
+cp /etc/issue /etc/issue.net
+
+# Hostname (live env only — installer will set the real hostname)
+echo "wagonos-live" > /etc/hostname

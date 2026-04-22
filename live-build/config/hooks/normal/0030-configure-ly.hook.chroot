@@ -1,0 +1,17 @@
+#!/bin/bash
+# Enable ly as the default display manager, disable any others
+set -euo pipefail
+echo "[wagonOS] Configuring ly as default display manager"
+
+# Defensively disable other DMs that may have been pulled in as deps
+for dm in gdm gdm3 sddm lightdm; do
+    systemctl disable "$dm" 2>/dev/null || true
+done
+
+# Set ly as the default DM
+systemctl enable ly.service
+
+# /etc/ly/config.ini ships via includes.chroot — verify
+if [[ ! -f /etc/ly/config.ini ]]; then
+    echo "[wagonOS] WARNING: /etc/ly/config.ini not found — using ly defaults"
+fi

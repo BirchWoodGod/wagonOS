@@ -1,0 +1,18 @@
+# PipeWire audio stack (default on Ubuntu 24.04)
+pipewire
+pipewire-pulse
+pipewire-jack
+pipewire-alsa
+wireplumber
+# Mixer + tools
+pavucontrol
+helvum
+pamixer
+playerctl
+alsa-utils
+# Bluetooth audio (with codec support)
+bluez
+bluez-tools
+blueman
+# Music player (TUI, suckless-friendly)
+cmus

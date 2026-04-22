@@ -1,0 +1,12 @@
+#!/bin/bash
+# Remove snapd if pulled in by deps; apt pin (in includes.chroot) prevents reinstall
+set -euo pipefail
+echo "[wagonOS] Removing snapd and verifying apt pin"
+
+apt-get purge -y snapd snap-confine 2>/dev/null || true
+rm -rf /var/cache/snapd /root/snap /home/*/snap 2>/dev/null || true
+
+if [[ ! -f /etc/apt/preferences.d/no-snap ]]; then
+    echo "[wagonOS] ERROR: /etc/apt/preferences.d/no-snap missing — pin won't take effect"
+    exit 1
+fi

@@ -1,0 +1,13 @@
+#!/bin/bash
+# fastfetch config + ASCII logo are shipped via includes.chroot
+# This hook is mostly a sanity check
+set -euo pipefail
+echo "[wagonOS] Verifying fastfetch wagonOS logo + config"
+
+for f in /usr/share/wagonos/ascii/wheel-40.txt \
+         /usr/share/wagonos/ascii/wheel-new.txt \
+         /etc/skel/.config/fastfetch/config.jsonc; do
+    if [[ ! -f "$f" ]]; then
+        echo "[wagonOS] WARNING: $f missing"
+    fi
+done

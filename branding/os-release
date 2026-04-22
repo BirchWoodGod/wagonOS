@@ -1,0 +1,11 @@
+NAME="wagonOS"
+VERSION="24.04"
+ID=wagonos
+ID_LIKE="ubuntu debian"
+PRETTY_NAME="wagonOS 24.04"
+VERSION_ID="24.04"
+HOME_URL="https://github.com/BirchWoodGod/wagonOS"
+SUPPORT_URL=""
+BUG_REPORT_URL="https://github.com/BirchWoodGod/wagonOS/issues"
+UBUNTU_CODENAME=noble
+LOGO=wagonos

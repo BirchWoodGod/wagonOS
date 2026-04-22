@@ -1,0 +1,54 @@
+#!/bin/bash
+# wagonos-firstboot — first-boot wizard
+# Detects GPU and offers to install proprietary drivers; runs once.
+set -euo pipefail
+
+DONE_FLAG=/var/lib/wagonos/.firstboot-done
+
+if [[ -f "$DONE_FLAG" ]]; then
+    exit 0
+fi
+
+LOG=/var/log/wagonos-firstboot.log
+exec > >(tee -a "$LOG") 2>&1
+
+echo "=== wagonOS first-boot wizard $(date) ==="
+
+# GPU detection
+GPU_VENDOR=""
+if lspci -nn | grep -E 'VGA|3D|Display' | grep -qi nvidia; then
+    GPU_VENDOR=nvidia
+elif lspci -nn | grep -E 'VGA|3D|Display' | grep -qi 'amd\|ati'; then
+    GPU_VENDOR=amd
+elif lspci -nn | grep -E 'VGA|3D|Display' | grep -qi intel; then
+    GPU_VENDOR=intel
+fi
+
+echo "[firstboot] Detected GPU vendor: ${GPU_VENDOR:-unknown}"
+
+case "$GPU_VENDOR" in
+    nvidia)
+        # Use ubuntu-drivers to pick the recommended driver
+        if command -v ubuntu-drivers >/dev/null 2>&1; then
+            echo "[firstboot] Installing recommended NVIDIA driver via ubuntu-drivers"
+            ubuntu-drivers install --gpgpu || true
+        else
+            echo "[firstboot] ubuntu-drivers not available; user must install NVIDIA driver manually"
+        fi
+        ;;
+    amd|intel)
+        echo "[firstboot] Open-source mesa drivers already installed; no action needed"
+        ;;
+    *)
+        echo "[firstboot] No supported GPU detected; skipping driver install"
+        ;;
+esac
+
+# Mark done so we never run again
+install -d -m 755 /var/lib/wagonos
+touch "$DONE_FLAG"
+
+# Self-disable the systemd unit
+systemctl disable wagonos-firstboot.service 2>/dev/null || true
+
+echo "[firstboot] Done."

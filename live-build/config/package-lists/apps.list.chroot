@@ -1,0 +1,29 @@
+# User-facing applications
+# NOTE: firefox is NOT in this list — installed via Mozilla PPA
+#       in hooks/normal/0005-mozilla-firefox.hook.chroot to avoid the
+#       snap-transition package that ships with Ubuntu 24.04.
+
+# Image editing
+gimp
+
+# File manager (XFCE — lightweight, no GNOME deps)
+thunar
+thunar-archive-plugin
+thunar-volman
+gvfs
+gvfs-backends
+
+# GUI text editor (lightweight, dev-friendly)
+geany
+geany-plugins
+
+# Archive manager + format support (lightweight, no GNOME deps)
+xarchiver
+unrar
+unzip
+zip
+p7zip-full
+p7zip-rar
+
+# Terminal fallback (st is built from source as the primary terminal)
+xterm

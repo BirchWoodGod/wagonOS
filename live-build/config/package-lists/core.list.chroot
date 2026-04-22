@@ -1,0 +1,20 @@
+# Core system packages — needed on every wagonOS install
+linux-image-generic
+linux-headers-generic
+ubuntu-standard
+network-manager
+network-manager-gnome
+plymouth
+plymouth-themes
+systemd-resolved
+locales
+console-setup
+keyboard-configuration
+sudo
+ca-certificates
+gnupg
+lsb-release
+software-properties-common
+firmware-linux
+firmware-linux-nonfree
+linux-firmware

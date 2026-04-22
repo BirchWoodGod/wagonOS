@@ -1,0 +1,33 @@
+# live-build artifacts
+live-build/cache/
+live-build/chroot/
+live-build/binary/
+live-build/.build/
+live-build/auto/.lock
+live-build/config/binary
+live-build/config/bootstrap
+live-build/config/chroot
+live-build/config/common
+live-build/config/source
+
+# Files copied in by `make prep` (canonical sources are branding/ + suckless-source/)
+live-build/config/includes.chroot/etc/os-release
+live-build/config/includes.chroot/usr/share/wagonos/ascii/
+live-build/config/includes.chroot/usr/share/wagonos/sl/
+
+# Build outputs
+*.iso
+*.img
+*.contents
+*.files
+*.packages
+*.zsync
+*.sha256
+
+# Editor/OS cruft
+*.swp
+*.swo
+*~
+.DS_Store
+.idea/
+.vscode/

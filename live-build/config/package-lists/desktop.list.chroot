@@ -1,0 +1,35 @@
+# Display server, DWM build deps, ly, fonts, helpers
+xorg
+xinit
+xserver-xorg-video-all
+xserver-xorg-input-all
+# Build deps for compiling DWM/dmenu/st/slstatus/j4-dmenu-desktop from source
+build-essential
+pkg-config
+meson
+ninja-build
+libx11-dev
+libxft-dev
+libxinerama-dev
+libxrandr-dev
+libxss-dev
+libimlib2-dev
+libfreetype-dev
+libfontconfig-dev
+# Display manager
+ly
+# Fonts
+fonts-dejavu
+fonts-liberation
+fonts-noto
+fonts-noto-color-emoji
+fonts-firacode
+fonts-jetbrains-mono
+# Utilities that pair well with DWM
+feh
+imagemagick
+dunst
+brightnessctl
+picom
+scrot
+flameshot

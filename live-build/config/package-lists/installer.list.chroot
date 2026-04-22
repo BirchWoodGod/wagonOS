@@ -1,0 +1,13 @@
+# Calamares installer (custom branding shipped via includes.chroot/etc/calamares)
+calamares
+qml-module-qtquick2
+qml-module-qtquick-controls
+qml-module-qtquick-controls2
+qml-module-qtquick-window2
+qml-module-qtquick-layouts
+qml-module-qtgraphicaleffects
+# Helper for installer to work with our partitioning
+parted
+gdisk
+dosfstools
+e2fsprogs
