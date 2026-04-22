@@ -1,7 +1,9 @@
 # live-build artifacts
 live-build/cache/
 live-build/chroot/
+live-build/chroot.*
 live-build/binary/
+live-build/binary.*
 live-build/.build/
 live-build/auto/.lock
 live-build/config/binary
