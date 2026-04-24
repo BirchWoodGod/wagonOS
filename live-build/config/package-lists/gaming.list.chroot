@@ -4,10 +4,11 @@
 # Steam (multiverse, requires i386 deps)
 steam-installer
 
-# Performance + monitoring
+# Performance + monitoring.
+# mangohud:i386 isn't packaged in noble — only amd64 is available; 32-bit
+# games will run without the overlay, which is an acceptable trade-off.
 gamemode
 mangohud
-mangohud:i386
 
 # Game launcher
 lutris
