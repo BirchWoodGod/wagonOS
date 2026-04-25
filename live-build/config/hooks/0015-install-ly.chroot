@@ -10,7 +10,10 @@ case "$ARCH" in
     *) echo "[wagonOS] Unsupported arch $ARCH for ly"; exit 1 ;;
 esac
 
-ZIG_VERSION="0.14.1"
+# Pinned versions. Note ziglang.org URL format: zig-<arch>-linux-<ver>.tar.xz
+# (arch BEFORE linux — they changed this; older docs/scripts have it reversed
+# and 404 silently).
+ZIG_VERSION="0.16.0"
 LY_REF="master"
 
 TMPDIR=$(mktemp -d /tmp/ly-build.XXXXXX)
@@ -32,11 +35,14 @@ fi
 
 cd "$TMPDIR"
 
-# Fetch zig toolchain
-echo "[wagonOS] Fetching zig $ZIG_VERSION ($ZIG_ARCH)"
-wget -q "https://ziglang.org/download/${ZIG_VERSION}/zig-linux-${ZIG_ARCH}-${ZIG_VERSION}.tar.xz"
-tar -xf "zig-linux-${ZIG_ARCH}-${ZIG_VERSION}.tar.xz"
-ZIG_BIN="$TMPDIR/zig-linux-${ZIG_ARCH}-${ZIG_VERSION}/zig"
+# Fetch zig toolchain (verbose: hook failures need to be diagnosable)
+ZIG_TARBALL="zig-${ZIG_ARCH}-linux-${ZIG_VERSION}.tar.xz"
+ZIG_URL="https://ziglang.org/download/${ZIG_VERSION}/${ZIG_TARBALL}"
+echo "[wagonOS] Fetching zig $ZIG_VERSION ($ZIG_ARCH) from $ZIG_URL"
+wget --no-verbose "$ZIG_URL" -O "$ZIG_TARBALL"
+tar -xf "$ZIG_TARBALL"
+ZIG_BIN="$TMPDIR/zig-${ZIG_ARCH}-linux-${ZIG_VERSION}/zig"
+"$ZIG_BIN" version
 
 # Fetch ly source
 echo "[wagonOS] Fetching ly source ($LY_REF)"
