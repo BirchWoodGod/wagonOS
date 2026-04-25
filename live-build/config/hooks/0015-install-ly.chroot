@@ -49,9 +49,39 @@ echo "[wagonOS] Fetching ly source ($LY_REF)"
 git clone --depth 1 --branch "$LY_REF" https://github.com/fairyglade/ly.git ly-src
 cd ly-src
 
-# Build + install. `installexe` is ly's install target; places:
-#   /usr/bin/ly, /usr/lib/systemd/system/ly.service, /etc/ly/config.ini
+# Build + install ly binary.
 "$ZIG_BIN" build installexe -Dinit_system=systemd
+
+# zig build installexe sometimes doesn't drop the systemd unit (varies by ly
+# version). Make sure ly.service exists so 0030-configure-ly can enable it.
+if [[ ! -f /usr/lib/systemd/system/ly.service ]]; then
+    if [[ -f res/ly.service ]]; then
+        echo "[wagonOS] Installing ly systemd unit from res/ly.service"
+        install -m 644 res/ly.service /usr/lib/systemd/system/ly.service
+    else
+        echo "[wagonOS] Writing minimal ly.service unit"
+        cat > /usr/lib/systemd/system/ly.service <<'EOF'
+[Unit]
+Description=TUI display manager
+Documentation=https://github.com/fairyglade/ly
+After=systemd-user-sessions.service plymouth-quit.service getty@tty2.service
+Conflicts=getty@tty2.service
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/ly
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/tty2
+TTYReset=yes
+TTYVHangup=yes
+Restart=always
+
+[Install]
+Alias=display-manager.service
+EOF
+    fi
+fi
 
 # Restore our config if ly's install wrote over it
 if [[ -n "$PRESERVED_CONFIG" && -f "$PRESERVED_CONFIG" ]]; then
@@ -61,4 +91,5 @@ fi
 
 # Verify
 command -v ly >/dev/null || { echo "[wagonOS] ERROR: ly binary not installed"; exit 1; }
-echo "[wagonOS] ly installed successfully"
+[[ -f /usr/lib/systemd/system/ly.service ]] || { echo "[wagonOS] ERROR: ly.service not installed"; exit 1; }
+echo "[wagonOS] ly installed successfully (binary + systemd unit)"
