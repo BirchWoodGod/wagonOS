@@ -26,6 +26,7 @@ lb config noauto \
     --architectures "${ARCH}" \
     --binary-images iso-hybrid \
     --bootloader syslinux \
+    --syslinux-theme live-build \
     --linux-flavours "${LINUX_FLAVOUR}" \
     --debian-installer false \
     --apt-recommends false \

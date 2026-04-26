@@ -1,0 +1,15 @@
+# wagonOS — block snapd, the firefox snap-transition deb, and gnome-software's
+# snap plugin. Lives in config/archives/ so live-build re-applies it after each
+# preferences.d wipe (it wipes between chroot and binary phases).
+
+Package: snapd
+Pin: release a=*
+Pin-Priority: -10
+
+Package: firefox
+Pin: version 1:1snap*
+Pin-Priority: -10
+
+Package: gnome-software-plugin-snap
+Pin: release a=*
+Pin-Priority: -10

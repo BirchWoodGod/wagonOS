@@ -1,5 +1,0 @@
-# wagonOS — prevent any package from pulling in snapd.
-# Without this, transitional packages (e.g. ubuntu-desktop deps) can reinstall snap.
-Package: snapd
-Pin: release a=*
-Pin-Priority: -10
