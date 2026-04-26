@@ -1,12 +1,21 @@
 #!/bin/bash
-# Remove snapd if pulled in by deps; apt pin (in includes.chroot) prevents reinstall
+# Remove snapd if pulled in by deps. The apt pin lives in
+# config/archives/no-snap.pref.{chroot,binary} which lb copies into
+# chroot/etc/apt/preferences.d/no-snap.pref during each phase to
+# prevent reinstall (also pins firefox 1:1snap* so the snap-transition
+# deb can't pull snapd in transitively).
 set -euo pipefail
 echo "[wagonOS] Removing snapd and verifying apt pin"
 
 apt-get purge -y snapd snap-confine 2>/dev/null || true
 rm -rf /var/cache/snapd /root/snap /home/*/snap 2>/dev/null || true
 
-if [[ ! -f /etc/apt/preferences.d/no-snap ]]; then
-    echo "[wagonOS] ERROR: /etc/apt/preferences.d/no-snap missing — pin won't take effect"
+# Sanity check: a snap-blocking pin file should be in place. lb saves
+# config/archives/no-snap.pref.chroot as preferences.d/no-snap.pref.
+if compgen -G "/etc/apt/preferences.d/no-snap*" > /dev/null; then
+    echo "[wagonOS] OK: snap pin file present"
+    grep -A1 '^Package: snapd' /etc/apt/preferences.d/no-snap* 2>/dev/null || true
+else
+    echo "[wagonOS] ERROR: no snap pin file under /etc/apt/preferences.d/ — would let snap creep back in. Failing hard."
     exit 1
 fi
